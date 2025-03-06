@@ -1,0 +1,25 @@
+name: Melon Ticket Checker
+
+on:
+  schedule:
+    - cron: '* * * * *' # 每分鐘執行一次（GitHub Actions 無法低於1分鐘）
+
+jobs:
+  check-tickets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check Melon Ticket Availability
+        id: check
+        uses: mooyoul/melon-ticket-actions@v1.1.0
+        with:
+          product-id: 100001
+          schedule-id: 210858
+          seat-id: 157, 158, 160, 174, 175, 176, 177, 396, 398, 400, 402, 403, 404, 598, 599, 600, 601, 602, 604, 605, 607, 608, 609, 610, 614, 616, 617, 618, 621, 623, 653, 654, 656, 694, 709, 710, 711, 713, 737, 739, 740, 741, 742
+
+      - name: Send Telegram Notification
+        if: success()
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendMessage" \
+          -d "chat_id=${{ secrets.TG_CHAT_ID }}" \
+          -d "text=🎟 Melon 票已開放！快去搶票！"
