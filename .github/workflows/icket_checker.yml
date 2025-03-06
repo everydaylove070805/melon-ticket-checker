@@ -1,0 +1,24 @@
+name: Melon Ticket Checker
+
+on:
+  push:
+  workflow_dispatch:  # 允許手動執行
+
+jobs:
+  check-tickets:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 下載程式碼
+        uses: actions/checkout@v3
+
+      - name: 設定 Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - name: 安裝 Requests
+        run: pip install requests
+
+      - name: 執行檢查腳本
+        run: python check_melon_ticket.py
