@@ -2,13 +2,13 @@ import time
 import requests
 
 # 設定你的演出、場次、座位 ID
-PRODUCT_ID = "210858"   # 你的演出 ID
-SCHEDULE_ID = "100001"  # 你的場次 ID
-SEAT_ID = "157, 158, 160, 174, 175, 176, 177, 396, 398, 400, 402, 403, 404, 598, 599, 600, 601, 602, 604, 605, 607, 608, 609, 610, 614, 616, 617, 618, 621, 623, 653, 654, 656, 694, 709, 710, 711, 713, 737, 739, 740, 741, 742"  # 你的座位 ID
+PRODUCT_ID = 210858   # 你的演出 ID
+SCHEDULE_ID = 100001  # 你的場次 ID
+SEAT_ID = 157, 158, 160, 174, 175, 176, 177, 396, 398, 400, 402, 403, 404, 598, 599, 600, 601, 602, 604, 605, 607, 608, 609, 610, 614, 616, 617, 618, 621, 623, 653, 654, 656, 694, 709, 710, 711, 713, 737, 739, 740, 741, 742  # 你的座位 ID
 
 # LINE Notify 設定
-LINE_ACCESS_TOKEN = "93FXd8FB5ziW5Vo8WXnjfjakytxzEQL7gZU4jCZDwmo"
-LINE_NOTIFY_URL = "https://notify-api.line.me/api/notify"
+LINE_ACCESS_TOKEN = 93FXd8FB5ziW5Vo8WXnjfjakytxzEQL7gZU4jCZDwmo
+LINE_NOTIFY_URL = https://notify-api.line.me/api/notify
 
 
 def send_line_message(message):
