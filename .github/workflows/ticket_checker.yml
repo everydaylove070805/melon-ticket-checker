@@ -3,6 +3,8 @@ name: Melon Ticket Checker
 on:
   push:
   workflow_dispatch:  # 允許手動執行
+  schedule:           # 設定定時任務
+    - cron: '* * * * *'  # 每 5 分鐘執行一次檢查
 
 jobs:
   check-tickets:
