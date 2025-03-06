@@ -30,11 +30,18 @@ def check_ticket():
         headers = {
             "Accept": "application/json"
         }
+        
+        # 發送請求
         response = requests.get(CHECK_URL, headers=headers)
 
-        # 打印回應內容，看看它是不是 JSON 格式
+        # 打印回應狀態碼和回應內容
         print(f"Response Status Code: {response.status_code}")
         print(f"Response Content: {response.text}")
+
+        # 如果回應為空或格式不正確，則輸出提示並返回
+        if not response.text:
+            print("錯誤：回應內容為空")
+            return
 
         # 嘗試解析 JSON 資料
         data = response.json()
