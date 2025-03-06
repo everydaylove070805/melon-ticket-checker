@@ -27,9 +27,8 @@ def check_ticket():
     try:
         CHECK_URL = f"https://ticket.melon.com/api/product/{PRODUCT_ID}/schedule/{SCHEDULE_ID}/seat/{SEAT_ID}"
 
-        # 嘗試加入更多標頭來告訴伺服器我們希望接受 JSON 格式的回應
+        # 設定 headers 只包含 User-Agent
         headers = {
-            "Accept": "application/json",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
         }
 
@@ -50,19 +49,15 @@ def check_ticket():
         data = response.json()
 
         # 確保 API 返回的資料格式正確
-        print(data)  # 打印返回的資料來檢查結構
         available = data.get("available", False)  # 假設 API 返回 {"available": True}
 
         if available:
             send_line_message("🎟️ 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId=210858")
         else:
             print("❌ 目前沒有票")
-    except requests.exceptions.RequestException as e:
-        print(f"請求錯誤：{e}")
-    except json.JSONDecodeError as e:
-        print(f"JSON 解析錯誤：{e}")
     except Exception as e:
         print(f"錯誤：{e}")
+
 
 
 if __name__ == "__main__":
