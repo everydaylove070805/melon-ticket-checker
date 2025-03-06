@@ -23,4 +23,4 @@ jobs:
         run: pip install requests
 
       - name: 執行檢查腳本
-        run: python check_melon_ticket.py
+        run: python melon-ticket-checker/check_melon_ticket.py
