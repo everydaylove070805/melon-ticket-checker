@@ -25,18 +25,19 @@ def check_ticket():
     """ 檢查票務狀態 """
     try:
         CHECK_URL = f"https://ticket.melon.com/api/product/{PRODUCT_ID}/schedule/{SCHEDULE_ID}/seat/{SEAT_ID}"
-        response = requests.get(CHECK_URL)
+        
+        # 加入 Accept 標頭告訴伺服器你要 JSON 格式回應
+        headers = {
+            "Accept": "application/json"
+        }
+        response = requests.get(CHECK_URL, headers=headers)
 
         # 打印回應內容，看看它是不是 JSON 格式
         print(f"Response Status Code: {response.status_code}")
         print(f"Response Content: {response.text}")
 
-        # 檢查是否成功收到 JSON 格式的回應
-        if "application/json" in response.headers.get("Content-Type", ""):
-            data = response.json()
-        else:
-            print("收到的不是 JSON 格式的回應，可能是錯誤或 HTML 頁面。")
-            return
+        # 嘗試解析 JSON 資料
+        data = response.json()
 
         # 確保 API 返回的資料格式正確
         available = data.get("available", False)  # 假設 API 返回 {"available": True}
@@ -47,6 +48,7 @@ def check_ticket():
             print("❌ 目前沒有票")
     except Exception as e:
         print(f"錯誤：{e}")
+
 
 if __name__ == "__main__":
     while True:
