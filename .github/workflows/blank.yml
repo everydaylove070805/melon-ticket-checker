@@ -1,25 +1,39 @@
-name: Melon Ticket Checker
+import time
+import requests
 
-on:
-  schedule:
-    - cron: '* * * * *' # 每分鐘執行一次（GitHub Actions 無法低於1分鐘）
+# 設定你的演出、場次、座位 ID
+PRODUCT_ID = "210858"   # 你的演出 ID
+SCHEDULE_ID = "100001"  # 你的場次 ID
+SEAT_ID = "157, 158, 160, 174, 175, 176, 177, 396, 398, 400, 402, 403, 404, 598, 599, 600, 601, 602, 604, 605, 607, 608, 609, 610, 614, 616, 617, 618, 621, 623, 653, 654, 656, 694, 709, 710, 711, 713, 737, 739, 740, 741, 742"         # 你的座位 ID
 
-jobs:
-  check-tickets:
-    runs-on: ubuntu-latest
-    timeout-minutes: 1
-    steps:
-      - name: Check Melon Ticket Availability
-        id: check
-        uses: mooyoul/melon-ticket-actions@v1.1.0
-        with:
-          product-id: 100001
-          schedule-id: 210858
-          seat-id: 157, 158, 160, 174, 175, 176, 177, 396, 398, 400, 402, 403, 404, 598, 599, 600, 601, 602, 604, 605, 607, 608, 609, 610, 614, 616, 617, 618, 621, 623, 653, 654, 656, 694, 709, 710, 711, 713, 737, 739, 740, 741, 742
+# LINE Notify 設定
+LINE_ACCESS_TOKEN = "93FXd8FB5ziW5Vo8WXnjfjakytxzEQL7gZU4jCZDwmo"
+LINE_NOTIFY_URL = "https://notify-api.line.me/api/notify"
 
-      - name: Send Telegram Notification
-        if: success()
-        run: |
-          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendMessage" \
-          -d "chat_id=${{ secrets.TG_CHAT_ID }}" \
-          -d "text=🎟 Melon 票已開放！快去搶票！"
+def send_line_message(message):
+    """ 發送 LINE 通知 """
+    headers = {"Authorization": f"Bearer {LINE_ACCESS_TOKEN}"}
+    data = {"message": message}
+    requests.post(LINE_NOTIFY_URL, headers=headers, data=data)
+
+def check_ticket():
+    """ 檢查票務狀態 """
+    try:
+        CHECK_URL = f"https://ticket.melon.com/api/product/{PRODUCT_ID}/schedule/{SCHEDULE_ID}/seat/{SEAT_ID}"
+        response = requests.get(CHECK_URL)
+        data = response.json()
+        available = data.get("available", False)  # 假設 API 返回 {"available": True}
+
+        if available:
+            send_line_message("🎟️ 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId=210858")
+        else:
+            print("❌ 目前沒有票")
+    except Exception as e:
+        print(f"錯誤：{e}")
+
+if __name__ == "__main__":
+    while True:
+        check_ticket()
+        time.sleep(1)  # 每 1 秒檢查一次
+
+
