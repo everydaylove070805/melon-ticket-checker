@@ -1,9 +1,23 @@
 // webpack.config.js
 module.exports = {
-  entry: './src/index.js', // 設定入口點
+  entry: './src/index.js',
   output: {
-    filename: 'bundle.js', // 設定輸出文件名
-    path: __dirname + '/dist', // 輸出目錄
+    filename: 'bundle.js',
+    path: __dirname + '/dist',
   },
-  mode: 'development', // 設定 mode，開發模式
+  mode: 'development', // 或 'production'
+  module: {
+    rules: [
+      {
+        test: /\.js$/, // 匹配所有 JavaScript 文件
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader', // 使用 babel-loader
+          options: {
+            presets: ['@babel/preset-env'], // 使用 @babel/preset-env 轉譯 JavaScript
+          },
+        },
+      },
+    ],
+  },
 };
