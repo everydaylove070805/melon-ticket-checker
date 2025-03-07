@@ -5,12 +5,12 @@ module.exports = {
     filename: 'bundle.js',
     path: __dirname + '/dist',
   },
-  mode: 'development', // 設定 mode 為 development
+  mode: 'development', // 或 'production'
   module: {
     rules: [
       {
         test: /\.js$/, // 匹配所有 JavaScript 文件
-        exclude: /node_modules/, // 排除 node_modules 目錄
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader', // 使用 babel-loader
           options: {
