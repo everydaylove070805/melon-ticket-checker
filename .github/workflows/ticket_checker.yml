@@ -7,19 +7,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # 確保完整下載 repo
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci  # 確保安裝所有套件
 
       - name: Run Lint
-        run: npm run lint  # 確保 npm install 先執行完
+        run: npx eslint .  # 確保執行的是本地 eslint
 
       - name: Build
         run: npm run build
-
-
 
 # name: Melon Ticket Checker
 
