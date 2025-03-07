@@ -1,26 +1,50 @@
-name: Melon Ticket Checker
-
-on:
-  push:
-  workflow_dispatch:  # 允許手動執行
-  schedule:           # 設定定時任務
-    - cron: '* * * * *'  # 每 5 分鐘執行一次檢查
-
+name: workflow
+on: push
 jobs:
-  check-tickets:
+  job:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 5
     steps:
-      - name: 下載程式碼
-        uses: actions/checkout@v3
-
-      - name: 設定 Python
-        uses: actions/setup-python@v3
+      - uses: actions/checkout@v1
+      - name: Prepare
+        run: npm ci
+      - name: Lint
+        uses: mooyoul/tslint-actions@master
         with:
-          python-version: '3.9'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: '*.ts'
+      - name: Build
+        run: npm run build
+      - name: Publish
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npx semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: 安裝 Requests
-        run: pip install requests
 
-      - name: 執行檢查腳本
-        run: python .github/workflows/check_melon_ticket.py
+# name: Melon Ticket Checker
+
+# on:
+#   push:
+#   workflow_dispatch:  # 允許手動執行
+#   schedule:           # 設定定時任務
+#     - cron: '* * * * *'  # 每 5 分鐘執行一次檢查
+
+# jobs:
+#   check-tickets:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: 下載程式碼
+#         uses: actions/checkout@v3
+
+#       - name: 設定 Python
+#         uses: actions/setup-python@v3
+#         with:
+#           python-version: '3.9'
+
+#       - name: 安裝 Requests
+#         run: pip install requests
+
+#       - name: 執行檢查腳本
+#         run: python .github/workflows/check_melon_ticket.py
