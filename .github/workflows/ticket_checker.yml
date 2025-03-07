@@ -1,45 +1,45 @@
-name: Melon Ticket Checker
-on: push
-jobs:
-  job:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Dependencies
-        run: npm ci  # 確保安裝所有套件
-
-      - name: Run Lint
-        run: npx eslint .  # 確保執行的是本地 eslint
-
-      - name: Build
-        run: npm run build
-
 # name: Melon Ticket Checker
-
-# on:
-#   push:
-#   workflow_dispatch:  # 允許手動執行
-#   schedule:           # 設定定時任務
-#     - cron: '* * * * *'  # 每 5 分鐘執行一次檢查
-
+# on: push
 # jobs:
-#   check-tickets:
+#   job:
 #     runs-on: ubuntu-latest
-
+#     timeout-minutes: 5
 #     steps:
-#       - name: 下載程式碼
-#         uses: actions/checkout@v3
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
 
-#       - name: 設定 Python
-#         uses: actions/setup-python@v3
-#         with:
-#           python-version: '3.9'
+#       - name: Install Dependencies
+#         run: npm ci  # 確保安裝所有套件
 
-#       - name: 安裝 Requests
-#         run: pip install requests
+#       - name: Run Lint
+#         run: npx eslint .  # 確保執行的是本地 eslint
 
-#       - name: 執行檢查腳本
-#         run: python .github/workflows/check_melon_ticket.py
+#       - name: Build
+#         run: npm run build
+
+name: Melon Ticket Checker
+
+on:
+  push:
+  workflow_dispatch:  # 允許手動執行
+  schedule:           # 設定定時任務
+    - cron: '* * * * *'  # 每 5 分鐘執行一次檢查
+
+jobs:
+  check-tickets:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 下載程式碼
+        uses: actions/checkout@v3
+
+      - name: 設定 Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - name: 安裝 Requests
+        run: pip install requests
+
+      - name: 執行檢查腳本
+        run: python .github/workflows/check_melon_ticket.py
