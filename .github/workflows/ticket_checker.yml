@@ -5,23 +5,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 確保完整下載 repo
 
       - name: Install Dependencies
         run: npm install
 
-      - name: Lint
-        run: npm run lint
+      - name: Run Lint
+        run: npm run lint  # 確保 npm install 先執行完
 
       - name: Build
         run: npm run build
-
-      - name: Publish
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: npx semantic-release
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 
 
