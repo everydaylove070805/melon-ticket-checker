@@ -1,25 +1,28 @@
-name: workflow
+name: Melon Ticket Checker
 on: push
 jobs:
   job:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v1
-      - name: Prepare
-        run: npm ci
+      - uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: npm install
+
       - name: Lint
-        uses: mooyoul/tslint-actions@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: '*.ts'
+        run: npm run lint
+
       - name: Build
         run: npm run build
+
       - name: Publish
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: npx semantic-release
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
 
 
 # name: Melon Ticket Checker
