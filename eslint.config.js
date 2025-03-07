@@ -1,18 +1,19 @@
 /** @type {import('eslint').Linter.Config} */
 module.exports = [
   {
-    // 將 plugins 改為物件格式
-    plugins: {
-      "eslint-plugin": require("eslint-plugin"), // 這是插件的實際引入
+    // 直接加入你要繼承的配置
+    parserOptions: {
+      ecmaVersion: 2020,
+      sourceType: "module",
     },
     rules: {
       "no-console": "warn",
     },
-    languageOptions: {
-      globals: {
-        browser: true,
-        node: true,
-      },
+  },
+  {
+    // 如果你需要更多的共享配置，將它直接放在此處
+    parserOptions: {
+      ecmaVersion: "latest",
     },
   },
 ];
