@@ -15,7 +15,7 @@
   \**********************/
 /***/ (() => {
 
-eval("// src/index.js\r\nconsole.log(\"Hello, Webpack!\");\r\n\n\n//# sourceURL=webpack://melon-ticket-checker/./src/index.js?");
+eval("// src/index.js\nconsole.log(\"Hello, Webpack!\");\n\n//# sourceURL=webpack://melon-ticket-checker/./src/index.js?");
 
 /***/ })
 
