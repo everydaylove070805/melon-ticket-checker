@@ -27,9 +27,21 @@ def send_line_message(message):
 
 def login():
     """ 模擬登入 Melon Ticket，回傳 session """
-    login_url = "https://ticket.melon.com/login"  # 這個 URL 需要用 F12 確認
     session = requests.Session()
 
+    # 先訪問登入頁面，獲取 CSRF Token 和 Cookie
+    login_page_url = "https://ticket.melon.com/login"
+    response = session.get(login_page_url)
+    
+    if response.status_code != 200:
+        print(f"❌ 無法訪問登入頁面，狀態碼: {response.status_code}")
+        return None
+
+    # 取得 CSRF Token（如果有的話）
+    csrf_token = response.cookies.get("XSRF-TOKEN", "")
+
+    login_url = "https://gmember.melon.com/login/login_form.htm?langCd=CN&redirectUrl=https://tkglobal.melon.com/main/index.htm?langCd=CN"  # **請確認這個 API 是否正確**
+    
     # 確認帳密是否存在
     if not EMAIL or not PASSWORD:
         print("⚠️ 錯誤：請設定 MELON_EMAIL 和 MELON_PASSWORD 環境變數")
@@ -41,13 +53,15 @@ def login():
     }
 
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Referer": "https://ticket.melon.com/",
+        "X-XSRF-TOKEN": csrf_token  # 加入 CSRF Token（如果需要）
     }
 
     # 發送登入請求
     response = session.post(login_url, data=login_data, headers=headers)
 
-    if response.status_code == 200:
+    if response.status_code == 200 and "成功" in response.text:  # **請確認回應格式**
         print("✅ 登入成功！")
         return session
     else:
@@ -59,34 +73,35 @@ def login():
 def check_ticket(session):
     """ 檢查票務狀態 """
     try:
-        CHECK_URL = f"https://ticket.melon.com/api/product/{PRODUCT_ID}/schedule/{SCHEDULE_ID}/seat"
-
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Referer": f"https://ticket.melon.com/performance/index.htm?langCd=EN&prodId={PRODUCT_ID}"
         }
 
-        params = {"seatId": SEAT_ID}  # 用 GET 參數方式傳遞座位 ID
+        for seat_id in SEAT_ID:  # **逐個查詢座位**
+            CHECK_URL = f"https://ticket.melon.com/api/product/{PRODUCT_ID}/schedule/{SCHEDULE_ID}/seat/{seat_id}"
+            response = session.get(CHECK_URL, headers=headers)
 
-        # 使用 session 來發送請求
-        response = session.get(CHECK_URL, headers=headers, params=params)
+            print(f"🎫 查詢座位 {seat_id}，狀態碼: {response.status_code}")
+            print(f"Response Headers: {response.headers}")
+            print(f"Response Content: {response.text}")
 
-        print(f"Response Status Code: {response.status_code}")
-        print(f"Response Headers: {response.headers}")
-        print(f"Response Content: {response.text}")
+            if response.status_code == 200:
+                data = response.json()
+                available = data.get("available", False)  # 假設 API 返回 {"available": True}
 
-        if not response.text:
-            print("錯誤：回應內容為空")
-            return
+                if available:
+                    send_line_message(f"🎟️ 座位 {seat_id} 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId={PRODUCT_ID}")
+            elif response.status_code == 404:
+                print(f"⚠️ 座位 {seat_id} 無效或查無資料")
+            elif response.status_code == 406:
+                print(f"🚫 請求被拒，可能需要修改 headers")
+            else:
+                print(f"⚠️ 未知錯誤：{response.status_code}")
+            time.sleep(1)  # 避免請求太頻繁
 
-        data = response.json()
-        available = data.get("available", False)  # 假設 API 返回 {"available": True}
-
-        if available:
-            send_line_message("🎟️ 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId=210858")
-        else:
-            print("❌ 目前沒有票")
     except Exception as e:
-        print(f"錯誤：{e}")
+        print(f"❌ 錯誤：{e}")
 
 
 if __name__ == "__main__":
