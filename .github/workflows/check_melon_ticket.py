@@ -13,7 +13,7 @@ EMAIL = os.getenv("secrets.MELON_EMAIL")  # 在系統環境變數設定 MELON_EM
 PASSWORD = os.getenv("secrets.MELON_PASSWORD")  # 在系統環境變數設定 MELON_PASSWORD
 
 # LINE Notify 設定
-LINE_ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN")  # LINE Token 也用環境變數存
+'''LINE_ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN")  # LINE Token 也用環境變數存
 LINE_NOTIFY_URL = "https://notify-api.line.me/api/notify"
 
 
@@ -23,7 +23,7 @@ def send_line_message(message):
     data = {"message": message}
     response = requests.post(LINE_NOTIFY_URL, headers=headers, data=data)
     print(f"Response status: {response.status_code}")
-    print(f"Response content: {response.text}")
+    print(f"Response content: {response.text}")'''
 
 def slackmes(message):
     webhook_url = os.getenv("SLACK_WEBHOOK_URL")
