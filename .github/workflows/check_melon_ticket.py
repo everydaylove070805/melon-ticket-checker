@@ -26,7 +26,6 @@ def send_line_message(message):
 
 def slackmes(message):
     webhook_url = os.getenv("SLACK_WEBHOOK_URL")
-    message = {"text": "GitHub Actions 任务执行成功！"}
     response = requests.post(webhook_url, json=message)
     
 def login():
@@ -94,7 +93,8 @@ def check_ticket(session):
                 data = response.json()
                 available = data.get("available", False)  # 假設 API 返回 {"available": True}
 
-                #if available:
+                if available:
+                    slackmes(f"🎟️ 座位 {seat_id} 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId={PRODUCT_ID}")
                 #    send_line_message(f"🎟️ 座位 {seat_id} 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId={PRODUCT_ID}")
             elif response.status_code == 404:
                 print(f"⚠️ 座位 {seat_id} 無效或查無資料")
