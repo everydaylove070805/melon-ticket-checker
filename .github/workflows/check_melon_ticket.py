@@ -24,7 +24,11 @@ def send_line_message(message):
     print(f"Response status: {response.status_code}")
     print(f"Response content: {response.text}")
 
-
+def slackmes(message):
+    webhook_url = os.getenv("SLACK_WEBHOOK_URL")
+    message = {"text": "GitHub Actions 任务执行成功！"}
+    response = requests.post(webhook_url, json=message)
+    
 def login():
     """ 模擬登入 Melon Ticket，回傳 session """
     session = requests.Session()
