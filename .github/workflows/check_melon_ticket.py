@@ -3,13 +3,13 @@ import requests
 import os
 
 # 設定你的演出、場次、座位 ID
-PRODUCT_ID = 210858   # 你的演出 ID
+PRODUCT_ID = 211313   # 你的演出 ID
 SCHEDULE_ID = 100001  # 你的場次 ID
 SEAT_ID = [157, 158, 160, 174, 175, 176, 177, 396, 398, 400, 402, 403, 404, 598, 599, 600, 601, 602, 604, 605, 607, 608, 609, 610, 614, 616, 617, 618, 621, 623, 653, 654, 656, 694, 709, 710, 711, 713, 737, 739, 740, 741, 742]
 
 # 使用環境變數來存帳密（確保密碼不寫在程式碼內）
-EMAIL = os.getenv("MELON_EMAIL")  # 在系統環境變數設定 MELON_EMAIL
-PASSWORD = os.getenv("MELON_PASSWORD")  # 在系統環境變數設定 MELON_PASSWORD
+EMAIL = os.getenv("secrets.MELON_EMAIL")  # 在系統環境變數設定 MELON_EMAIL
+PASSWORD = os.getenv("secrets.MELON_PASSWORD")  # 在系統環境變數設定 MELON_PASSWORD
 
 # LINE Notify 設定
 LINE_ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN")  # LINE Token 也用環境變數存
