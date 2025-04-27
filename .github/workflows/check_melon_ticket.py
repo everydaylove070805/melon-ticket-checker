@@ -94,8 +94,8 @@ def check_ticket(session):
                 data = response.json()
                 available = data.get("available", False)  # 假設 API 返回 {"available": True}
 
-                if available:
-                    send_line_message(f"🎟️ 座位 {seat_id} 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId={PRODUCT_ID}")
+                #if available:
+                #    send_line_message(f"🎟️ 座位 {seat_id} 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId={PRODUCT_ID}")
             elif response.status_code == 404:
                 print(f"⚠️ 座位 {seat_id} 無效或查無資料")
             elif response.status_code == 406:
