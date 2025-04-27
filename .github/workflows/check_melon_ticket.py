@@ -97,7 +97,7 @@ def check_ticket(session):
                 if available:
                     slackmes(f"🎟️ 座位 {seat_id} 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId={PRODUCT_ID}")
                     webbrowser.open("https://www.bilibili.com")
-                    seat = driver.find_element(By.CSS_SELECTOR, f".seat[data-seat-id='{seat_id}']")
+                    seat = response.find_element(By.CSS_SELECTOR, f".seat[data-seat-id='{seat_id}']")
                     seat.click()
                     print(f"✅ 成功选中座位 {seat_id}")
 
