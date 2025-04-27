@@ -97,6 +97,14 @@ def check_ticket(session):
                 if available:
                     slackmes(f"🎟️ 座位 {seat_id} 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId={PRODUCT_ID}")
                     webbrowser.open("https://www.bilibili.com")
+                    seat = driver.find_element(By.CSS_SELECTOR, f".seat[data-seat-id='{seat_id}']")
+                    seat.click()
+                    print(f"✅ 成功选中座位 {seat_id}")
+
+    # 4. 点击“确认”或“购买”按钮
+    confirm_button = driver.find_element(By.CSS_SELECTOR, ".btn-confirm")
+    confirm_button.click()
+    print("✅ 已提交选座！")
                 #    send_line_message(f"🎟️ 座位 {seat_id} 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId={PRODUCT_ID}")
             elif response.status_code == 404:
                 print(f"⚠️ 座位 {seat_id} 無效或查無資料")
