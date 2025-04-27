@@ -1,6 +1,7 @@
 import time
 import requests
 import os
+import webbrowser
 
 # 設定你的演出、場次、座位 ID
 PRODUCT_ID = 211313   # 你的演出 ID
@@ -95,6 +96,7 @@ def check_ticket(session):
 
                 if available:
                     slackmes(f"🎟️ 座位 {seat_id} 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId={PRODUCT_ID}")
+                    webbrowser.open("https://www.bilibili.com")
                 #    send_line_message(f"🎟️ 座位 {seat_id} 有票了！快去搶票！👉 https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId={PRODUCT_ID}")
             elif response.status_code == 404:
                 print(f"⚠️ 座位 {seat_id} 無效或查無資料")
